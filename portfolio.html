@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vaishnavi S — Full-Stack Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B1220;
+    --panel: #101A2E;
+    --panel-2: #16233B;
+    --line: #23324D;
+    --text: #E7ECF3;
+    --muted: #8B98AC;
+    --amber: #FFB454;
+    --teal: #6EC1E4;
+    --mono: 'IBM Plex Mono', monospace;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(110,193,228,0.08) 1px, transparent 0);
+    background-size: 28px 28px;
+    pointer-events:none;
+    z-index:0;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:920px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+
+  /* NAV */
+  nav{
+    position:sticky; top:0; z-index:20;
+    background:rgba(11,18,32,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding-top:16px; padding-bottom:16px;}
+  .logo{font-family:var(--mono); font-size:0.95rem; color:var(--amber); letter-spacing:0.5px;}
+  .logo span{color:var(--muted);}
+  .navlinks{display:flex; gap:28px; font-family:var(--mono); font-size:0.82rem;}
+  .navlinks a{color:var(--muted); transition:color .2s;}
+  .navlinks a:hover{color:var(--teal);}
+  .navtoggle{display:none; flex-direction:column; gap:4px; cursor:pointer; background:none; border:none;}
+  .navtoggle span{width:22px; height:2px; background:var(--text);}
+
+  /* HERO */
+  header.hero{padding:88px 0 64px; position:relative;}
+  .kicker{
+    font-family:var(--mono); font-size:0.82rem; color:var(--teal);
+    margin-bottom:18px; display:flex; align-items:center; gap:10px;
+  }
+  .kicker .dot{width:7px; height:7px; border-radius:50%; background:#4ADE80; box-shadow:0 0 8px #4ADE80; animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.35;}}
+  h1.name{
+    font-family:var(--display); font-weight:700;
+    font-size:clamp(2.6rem, 7vw, 4.4rem);
+    line-height:1.03; letter-spacing:-0.02em;
+    margin-bottom:14px;
+  }
+  h1.name em{font-style:normal; color:var(--amber);}
+  .role{
+    font-family:var(--display); font-weight:500; font-size:1.3rem;
+    color:var(--teal); margin-bottom:22px;
+  }
+  .lede{max-width:56ch; color:var(--muted); font-size:1.02rem; margin-bottom:34px;}
+  .contact-row{display:flex; flex-wrap:wrap; gap:10px 14px; font-family:var(--mono); font-size:0.82rem;}
+  .contact-row a, .contact-row span{
+    border:1px solid var(--line); padding:7px 13px; border-radius:3px; color:var(--muted);
+    display:inline-flex; align-items:center; gap:7px; transition:border-color .2s, color .2s;
+  }
+  .contact-row a:hover{border-color:var(--teal); color:var(--teal);}
+
+  /* TERMINAL PANEL */
+  .terminal{
+    margin-top:56px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:8px;
+    overflow:hidden;
+    max-width:640px;
+    box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);
+  }
+  .term-bar{
+    background:var(--panel-2); padding:10px 14px;
+    display:flex; align-items:center; gap:8px;
+    border-bottom:1px solid var(--line);
+  }
+  .term-bar span{width:10px; height:10px; border-radius:50%; display:inline-block;}
+  .term-bar span:nth-child(1){background:#FF5F56;}
+  .term-bar span:nth-child(2){background:#FFBD2E;}
+  .term-bar span:nth-child(3){background:#27C93F;}
+  .term-bar .term-title{margin-left:8px; font-family:var(--mono); font-size:0.75rem; color:var(--muted);}
+  .term-body{padding:20px 22px; font-family:var(--mono); font-size:0.84rem; color:#B9C4D6; min-height:150px;}
+  .term-body .line{margin-bottom:6px;}
+  .term-body .prompt{color:var(--amber);}
+  .term-body .ok{color:#4ADE80;}
+  #typed{white-space:pre-wrap;}
+  .cursor{display:inline-block; width:7px; height:15px; background:var(--teal); vertical-align:-2px; animation:blink 1s step-end infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  /* SECTIONS */
+  section{padding:64px 0; border-top:1px solid var(--line); position:relative;}
+  .sec-head{display:flex; align-items:baseline; gap:14px; margin-bottom:36px;}
+  .sec-num{font-family:var(--mono); color:var(--amber); font-size:0.82rem;}
+  .sec-title{font-family:var(--display); font-weight:600; font-size:1.7rem;}
+
+  /* SKILLS */
+  .skill-groups{display:grid; grid-template-columns:1fr 1fr; gap:32px 48px;}
+  .skill-group h3{
+    font-family:var(--mono); font-size:0.8rem; color:var(--teal);
+    margin-bottom:12px; font-weight:500;
+  }
+  .tags{display:flex; flex-wrap:wrap; gap:8px;}
+  .tag{
+    font-family:var(--mono); font-size:0.78rem; color:var(--text);
+    background:var(--panel); border:1px solid var(--line);
+    padding:6px 11px; border-radius:3px;
+  }
+
+  /* PROJECT */
+  .project-card{
+    background:var(--panel); border:1px solid var(--line); border-radius:8px;
+    padding:30px; display:grid; grid-template-columns:1fr 200px; gap:28px; align-items:center;
+  }
+  .project-tag{font-family:var(--mono); font-size:0.72rem; color:var(--amber); margin-bottom:8px; display:block;}
+  .project-card h3{font-family:var(--display); font-size:1.3rem; margin-bottom:12px;}
+  .project-card ul{list-style:none; color:var(--muted); font-size:0.94rem;}
+  .project-card li{position:relative; padding-left:18px; margin-bottom:9px;}
+  .project-card li::before{content:"›"; position:absolute; left:0; color:var(--teal);}
+  .project-card li b{color:var(--text); font-weight:600;}
+  .radar{width:100%; aspect-ratio:1; }
+
+  /* TIMELINE (experience + education) */
+  .tl-item{
+    display:grid; grid-template-columns:110px 1fr; gap:24px;
+    padding:22px 0; border-bottom:1px solid var(--line);
+  }
+  .tl-item:last-child{border-bottom:none;}
+  .tl-when{font-family:var(--mono); font-size:0.78rem; color:var(--muted); padding-top:3px;}
+  .tl-body h3{font-family:var(--display); font-size:1.1rem; margin-bottom:4px;}
+  .tl-body .org{color:var(--teal); font-size:0.9rem; margin-bottom:10px;}
+  .tl-body ul{list-style:none; color:var(--muted); font-size:0.92rem;}
+  .tl-body li{position:relative; padding-left:16px; margin-bottom:6px;}
+  .tl-body li::before{content:"·"; position:absolute; left:0; color:var(--amber); font-weight:700;}
+
+  /* CERTS */
+  .cert-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .cert-item{
+    display:flex; justify-content:space-between; gap:10px;
+    padding:13px 16px; background:var(--panel); border:1px solid var(--line); border-radius:6px;
+    font-size:0.9rem;
+  }
+  .cert-item .src{color:var(--muted); font-family:var(--mono); font-size:0.76rem;}
+
+  /* FOOTER */
+  footer{padding:60px 0 80px; text-align:center;}
+  footer .cta{font-family:var(--display); font-weight:600; font-size:1.6rem; margin-bottom:20px;}
+  footer .contact-row{justify-content:center;}
+  footer .signoff{margin-top:40px; color:var(--muted); font-family:var(--mono); font-size:0.75rem;}
+
+  @media (max-width: 720px){
+    .navlinks{display:none;}
+    .navtoggle{display:flex;}
+    .skill-groups{grid-template-columns:1fr;}
+    .project-card{grid-template-columns:1fr;}
+    .radar{max-width:220px; margin:0 auto;}
+    .cert-grid{grid-template-columns:1fr;}
+    .tl-item{grid-template-columns:1fr; gap:6px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .kicker .dot{animation:none;}
+    .cursor{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo">vaishnavi<span>.s</span></div>
+    <div class="navlinks">
+      <a href="#skills">skills</a>
+      <a href="#projects">projects</a>
+      <a href="#experience">experience</a>
+      <a href="#certifications">certs</a>
+      <a href="#contact">contact</a>
+    </div>
+    <button class="navtoggle" id="navtoggle" aria-label="menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker"><span class="dot"></span>open to full-stack roles</div>
+    <h1 class="name">Vaishnavi <em>S.</em></h1>
+    <div class="role">Full-Stack Developer</div>
+    <p class="lede">Building scalable web applications across the MERN stack, with a growing focus on systems that watch, log, and defend networks in real time.</p>
+    <div class="contact-row">
+      <span>📍 Salem, Tamil Nadu, India</span>
+      <a href="mailto:vaishnavis@example.com">vaishnavis@example.com</a>
+      <a href="tel:+9100000000">+91 00000 00000</a>
+      <a href="https://linkedin.com/in/vaishnavi-s" target="_blank">linkedin.com/in/vaishnavi-s</a>
+      <a href="https://github.com/vaishnavi-s" target="_blank">github.com/vaishnavi-s</a>
+    </div>
+
+    <div class="terminal">
+      <div class="term-bar">
+        <span></span><span></span><span></span>
+        <span class="term-title">status.log</span>
+      </div>
+      <div class="term-body">
+        <div id="typed"></div><span class="cursor"></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">01</span><h2 class="sec-title">Technical skills</h2></div>
+    <div class="skill-groups">
+      <div class="skill-group">
+        <h3>Programming languages</h3>
+        <div class="tags"><span class="tag">Java</span><span class="tag">Python</span><span class="tag">JavaScript</span><span class="tag">TypeScript</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Database &amp; SQL</h3>
+        <div class="tags"><span class="tag">MySQL</span><span class="tag">PostgreSQL</span><span class="tag">MongoDB</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Frontend development</h3>
+        <div class="tags"><span class="tag">HTML5</span><span class="tag">CSS3</span><span class="tag">React.js</span><span class="tag">Next.js</span><span class="tag">Tailwind CSS</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Tools &amp; platforms</h3>
+        <div class="tags"><span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">VS Code</span><span class="tag">Postman</span><span class="tag">Docker</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Backend development</h3>
+        <div class="tags"><span class="tag">Node.js</span><span class="tag">Express.js</span><span class="tag">REST APIs</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Other skills</h3>
+        <div class="tags"><span class="tag">Data Structures &amp; Algorithms</span><span class="tag">Problem Solving</span><span class="tag">Agile</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title">Featured project</h2></div>
+    <div class="project-card">
+      <div>
+        <span class="project-tag">FULL STACK PROJECT</span>
+        <h3>Smart Firewall Monitoring System</h3>
+        <ul>
+          <li>Developed a web application to monitor and analyze network traffic for <b>potential threats</b> using a smart firewall system.</li>
+          <li>Implemented <b>real-time threat detection</b>, log analysis and alert notifications.</li>
+          <li>Built with React.js, Node.js, Express.js, MySQL, Socket.io, Tailwind CSS.</li>
+          <li>Outcome: improved network security and reduced manual monitoring effort.</li>
+        </ul>
+      </div>
+      <svg class="radar" viewBox="0 0 200 200" aria-hidden="true">
+        <circle cx="100" cy="100" r="90" fill="none" stroke="#23324D" stroke-width="1"/>
+        <circle cx="100" cy="100" r="60" fill="none" stroke="#23324D" stroke-width="1"/>
+        <circle cx="100" cy="100" r="30" fill="none" stroke="#23324D" stroke-width="1"/>
+        <line x1="10" y1="100" x2="190" y2="100" stroke="#23324D" stroke-width="1"/>
+        <line x1="100" y1="10" x2="100" y2="190" stroke="#23324D" stroke-width="1"/>
+        <circle cx="140" cy="70" r="4" fill="#FFB454"/>
+        <circle cx="65" cy="130" r="4" fill="#6EC1E4"/>
+        <circle cx="120" cy="150" r="4" fill="#6EC1E4"/>
+        <g stroke="#FFB454" stroke-width="1.5" fill="none" opacity="0.9">
+          <path d="M100 100 L 100 10 A 90 90 0 0 1 165 35 Z">
+            <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="4s" repeatCount="indefinite"/>
+          </path>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">Experience &amp; education</h2></div>
+
+    <div class="tl-item">
+      <div class="tl-when">3 months</div>
+      <div class="tl-body">
+        <h3>Full Stack Developer Intern</h3>
+        <div class="org">Tech Solutions Pvt. Ltd.</div>
+        <ul>
+          <li>Worked on a responsive web application using the MERN stack.</li>
+          <li>Assisted in designing REST APIs and integrating frontend with backend services.</li>
+          <li>Performed database operations and wrote optimized queries in MongoDB.</li>
+          <li>Collaborated with the team to fix bugs and improve application performance.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-when">2023 – 2027</div>
+      <div class="tl-body">
+        <h3>B.E. Computer Science &amp; Engineering</h3>
+        <div class="org">Annapoorana Engineering College, Salem, Tamil Nadu · CGPA 8.57 / 10</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certifications">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-num">04</span><h2 class="sec-title">Certifications</h2></div>
+    <div class="cert-grid">
+      <div class="cert-item"><span>Full-Stack Web Development</span><span class="src">Udemy</span></div>
+      <div class="cert-item"><span>UX/UI Design</span><span class="src">Great Learning</span></div>
+      <div class="cert-item"><span>MERN Stack Development</span><span class="src">Coursera</span></div>
+      <div class="cert-item"><span>Diploma in Computer Application</span><span class="src">DCA</span></div>
+      <div class="cert-item"><span>Introduction to Python</span><span class="src">NPTEL</span></div>
+      <div class="cert-item"><span>Learnathon Certification</span><span class="src">Smart Internz</span></div>
+      <div class="cert-item"><span>MongoDB Certification</span><span class="src">MongoDB University</span></div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="cta">Let's build something.</div>
+    <div class="contact-row">
+      <a href="mailto:vaishnavis@example.com">vaishnavis@example.com</a>
+      <a href="tel:+9100000000">+91 00000 00000</a>
+      <a href="https://linkedin.com/in/vaishnavi-s" target="_blank">LinkedIn</a>
+      <a href="https://github.com/vaishnavi-s" target="_blank">GitHub</a>
+    </div>
+    <div class="signoff">Salem, Tamil Nadu, India</div>
+  </div>
+</footer>
+
+<script>
+  // typing effect for terminal panel
+  const lines = [
+    "$ whoami",
+    "vaishnavi_s — full-stack developer",
+    "",
+    "$ status --check",
+    "[ok] frontend   React.js / Next.js / Tailwind",
+    "[ok] backend    Node.js / Express.js",
+    "[ok] database   MySQL / PostgreSQL / MongoDB",
+    "[ok] monitoring smart-firewall-system : ACTIVE",
+    "",
+    "$ _"
+  ];
+  const el = document.getElementById('typed');
+  let li = 0, ci = 0, out = "";
+  function typeStep(){
+    if(li >= lines.length){ return; }
+    const line = lines[li];
+    if(ci <= line.length){
+      out = lines.slice(0, li).join("\n") + (li>0 ? "\n" : "") + line.slice(0, ci);
+      el.textContent = out;
+      ci++;
+      setTimeout(typeStep, line === "" ? 60 : 22);
+    } else {
+      li++; ci = 0;
+      setTimeout(typeStep, 150);
+    }
+  }
+  typeStep();
+
+  // mobile nav toggle
+  const toggle = document.getElementById('navtoggle');
+  const navlinks = document.querySelector('.navlinks');
+  toggle.addEventListener('click', () => {
+    const open = navlinks.style.display === 'flex';
+    navlinks.style.display = open ? 'none' : 'flex';
+    navlinks.style.flexDirection = 'column';
+    navlinks.style.position = 'absolute';
+    navlinks.style.top = '58px';
+    navlinks.style.right = '28px';
+    navlinks.style.background = 'var(--panel)';
+    navlinks.style.border = '1px solid var(--line)';
+    navlinks.style.borderRadius = '6px';
+    navlinks.style.padding = '14px 20px';
+    navlinks.style.gap = '14px';
+  });
+</script>
+
+</body>
+</html>
